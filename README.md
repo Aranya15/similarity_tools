@@ -21,3 +21,10 @@ The trade-off is deliberate: the functions are pure and case-sensitive. No norma
 - Jaro-Winkler is symmetric: `jaro_winkler(a, b) == jaro_winkler(b, a)`.
 - The Jaro-Winkler prefix boost is capped at 4 characters and uses the standard weight of 0.1.
 - Case matters: `levenshtein("a", "A")` is 1, and `jaro_winkler("a", "A")` is 0.0.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
